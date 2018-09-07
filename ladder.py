@@ -6,12 +6,31 @@ ladder = []
 ## Appends new player to the end of the ladder
 def new_player(player_name):
     ladder.append(player_name)
+    print("> Added: " + player_name)
     return
 
 def update_ladder(winner_name, loser_name):
 
+    if winner_name not in ladder and loser_name not in ladder:
+        print("AAAAAA")
+        new_player(winner_name)
+        new_player(loser_name)
+        return ladder
+    else:
+        if winner_name not in ladder:
+            new_player(winner_name)
+        if loser_name not in ladder:
+            new_player(loser_name)
+
+        return move_players(winner_name, loser_name)
+
+def move_players(winner_name, loser_name):
     new_ladder = []
     loser_position = ladder.index(loser_name)
+    winner_position = ladder.index(winner_name)
+
+    if (winner_position < loser_position):
+        return ladder
 
     if loser_position > 0:
         new_ladder = ladder[:loser_position]
@@ -22,6 +41,8 @@ def update_ladder(winner_name, loser_name):
     ladder.remove(winner_name)
 
     new_ladder.extend(ladder[loser_position+1:])
+
+    print("> Score: %s beat %s" % (winner_name, loser_name))
 
     return new_ladder
 
