@@ -1,4 +1,5 @@
 from leaderboard import Leaderboard
+from player import Player
 import sys
 
 leaderboard = Leaderboard()
@@ -15,21 +16,24 @@ def show_leaderboard():
 
 def main():
 
-   global leaderboard
+    global leaderboard
 
-   leaderboard.set_players(read_leaderboard())
+    leaderboard.set_players(read_leaderboard())
 
-   args = sanitise_input(sys.argv[1:])
+    args = sanitise_input(sys.argv[1:])
 
-   if args[0] == "-add":
-       add_player(args[1])
-       print("> Added: " + player_name)
+    if args[0] == "-add":
+        add_player(args[1])
+        print("> Added: " + args[1])
 
-   if args[0] == "-score":
-       leaderboard = update_leaderboard(args[1], args[2])
+    if args[0] == "-score":
+        enter_score(args[1], args[2])
+        print("> Score: %s beat %s" % (args[1], args[2]))
 
-   if args[0] == "-show":
-       show_leaderboard()
+    if args[0] == "-show":
+        show_leaderboard()
+
+    write_leaderboard()
 
 def sanitise_input(input_arr):
     san = []
@@ -37,9 +41,9 @@ def sanitise_input(input_arr):
         san.append(item.lower())
     return san
 
-def write_leaderboard(leaderboard):
-    with open("leaderboard.csv") as f:
-        for name in leaderboard.get_players():
+def write_leaderboard():
+    with open("leaderboard.csv", "w") as f:
+        for name in leaderboard.get_players()rs:
             f.write(name + "\n")
     f.close()
 
