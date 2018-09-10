@@ -3,4 +3,4 @@ class Player:
         self.name = name
 
     def get_name(self):
-        return self.name
+        return str(self.name)

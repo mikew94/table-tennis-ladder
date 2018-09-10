@@ -12,7 +12,8 @@ def enter_score(winner_name, loser_name):
     leaderboard.update_leaderboard(winner_name, loser_name)
 
 def show_leaderboard():
-    print(leaderboard.get_players())
+    for player in leaderboard.get_players():
+        print(player.get_name())
 
 def main():
 
@@ -43,8 +44,8 @@ def sanitise_input(input_arr):
 
 def write_leaderboard():
     with open("leaderboard.csv", "w") as f:
-        for name in leaderboard.get_players()rs:
-            f.write(name + "\n")
+        for player in leaderboard.get_players():
+            f.write(str(player.name) + "\n")
     f.close()
 
 def read_leaderboard():
