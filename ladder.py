@@ -12,7 +12,6 @@ def new_player(player_name):
 def update_ladder(winner_name, loser_name):
 
     if winner_name not in ladder and loser_name not in ladder:
-        print("AAAAAA")
         new_player(winner_name)
         new_player(loser_name)
         return ladder
