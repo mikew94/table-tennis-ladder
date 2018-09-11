@@ -15,14 +15,23 @@ def show_leaderboard():
     for player in leaderboard.get_players():
         print(player.get_name())
 
+commands = ["-add", "-score", "-show"]
+
 def main():
 
     global leaderboard
 
-    leaderboard.set_players(read_leaderboard())
+    load_leaderboard()
 
     args = sanitise_input(sys.argv[1:])
 
+    if len(args) > 0 and args[0] in commands: 
+        command_processor(args)
+    else:
+        print("These are the available options:" + str(commands))
+        sys.exit(1)
+
+def command_processor(args):
     if args[0] == "-add":
         add_player(args[1])
         print("> Added: " + args[1])
@@ -41,6 +50,9 @@ def sanitise_input(input_arr):
     for item in input_arr:
         san.append(item.lower())
     return san
+
+def load_leaderboard():
+    leaderboard.set_players(read_leaderboard())
 
 def write_leaderboard():
     with open("leaderboard.csv", "w") as f:
