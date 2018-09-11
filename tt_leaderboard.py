@@ -1,6 +1,7 @@
 from leaderboard import Leaderboard
 from player import Player
 from prettytable import PrettyTable
+import os
 import sys
 
 leaderboard = Leaderboard()
@@ -86,9 +87,13 @@ def write_leaderboard():
 
 def read_leaderboard():
     names = []
-    with open("leaderboard.csv") as f:
-        for line in f:
-            names.append(line.strip())
+    if os.path.isfile("leaderboard.csv"):
+        with open("leaderboard.csv") as f:
+            for line in f:
+                names.append(line.strip())
+    else:
+        file = open("leaderboard.csv", "w")      
+        file.close()
     return names
 
 if __name__ == '__main__':
