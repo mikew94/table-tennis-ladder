@@ -18,8 +18,7 @@ def add_players(players):
 
 def remove_player(players):
     success = True
-    player = leaderboard.get_player_from_list(player_name)
-    for player in players:
+    for player in leaderboard.get_players():
         if player:
             leaderboard.remove_player(player)
         else:
