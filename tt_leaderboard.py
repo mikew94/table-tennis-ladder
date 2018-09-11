@@ -66,7 +66,7 @@ def help(command):
     elif command == "-clear" or command == "clear":
         print("usage: -clear")
         print("This clears the leaderboard")
-    elif command is None:      
+    else:      
         print("These are the available options:" + str(commands))
         print("usage: -help [command]")
 
