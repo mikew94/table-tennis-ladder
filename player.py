@@ -4,3 +4,4 @@ class Player:
 
     def get_name(self):
         return str(self.name)
+    

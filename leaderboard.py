@@ -1,6 +1,7 @@
 from player import Player
 
 class Leaderboard:
+
     players = []
 
     def update_leaderboard(self, winner_name, loser_name):
@@ -36,9 +37,20 @@ class Leaderboard:
     def add_player(self, player_name):
         self.players.append(Player(player_name))
 
-    def get_player_from_list(self, value):
+    def remove_player(self, player):
+        self.players.remove(player)
+
+    def clear_table(self):
+        self.players = []
+
+    def get_player_from_list(self, player_name):
         for player in self.players:
-            print(player.name)
-            if player.name == value:
+            if player.name == player_name:
                 return player
+        return None
+    
+    def get_player_index_from_list(self, player_name):
+        for player in self.players:
+            if player.name == player_name:
+                return self.players.index(player)
         return None
