@@ -1,54 +1,44 @@
 from leaderboard import Leaderboard
 from player import Player
 from prettytable import PrettyTable
+from leaderboardcontroller import LeaderboardController
 import os
 import sys
 
-leaderboard = Leaderboard()
+leaderboard_controller = LeaderboardController()
 
 ### COMMANDS ###
 def add_players(players):
-    success = True
-    for player_name in players:
-        if not leaderboard.get_player_from_list(player_name):
-            leaderboard.add_player(player_name)
-        else:
-            success = False
-    return success
+    return leaderboard_controller.add_players(players)
 
-def remove_player(players):
-    success = True
-    for player_name in players:
-        player = leaderboard.get_player_from_list(player_name)
-        if player:
-            leaderboard.remove_player(player)
-        else:
-            success = False
-    return success
+def remove_players(players):
+    return leaderboard_controller.remove_players(players)
 
 def enter_score(winner_name, loser_name):
-    leaderboard.update_leaderboard(winner_name, loser_name)
+    leaderboard_controller.submit_score(winner_name, loser_name)
 
 def show_leaderboard():
     leader_table = PrettyTable()
     leader_table.field_names = ["Rank", "Player Name"]
 
-    if len(get_leaderboard_players()) == 0:
+    players = leaderboard_controller.get_leaderboard_players()
+
+    if len(players) == 0:
         leader_table.add_row(["0", "Add Players"])
 
-    for index, player in enumerate(get_leaderboard_players()):
-        leader_table.add_row([index + 1, player.get_name().capitalize()])
+    for index, player in enumerate(players):
+        leader_table.add_row([index + 1, player.name.capitalize()])
         
     print(leader_table)
 
 def find_player(player_name):
-    return leaderboard.get_player_index_from_list(player_name)
+    return leaderboard_controller.find_player(player_name)
 
 def get_leaderboard_players():
-    return leaderboard.get_players()
+    return leaderboard_controller.get_leaderboard_players()
 
 def clear_table():
-    leaderboard.clear_table()
+    leaderboard_controller.clear_table()
 
 def help(command):
     if command == "-score" or command == "score":
@@ -77,9 +67,7 @@ commands = ["-add", "-remove", "-clear", "-score", "-find", "-show", "-help"]
 
 def main():
 
-    global leaderboard
-
-    load_leaderboard()
+    load_leaderboards()
 
     args = sanitise_input(sys.argv[1:])
 
@@ -104,7 +92,7 @@ def command_processor(args):
             help(args[0])
     elif args[0] == "-remove":
         if len(args) >= 2 and len(args) < 7:
-            success = remove_player(args[1:])
+            success = remove_players(args[1:])
             if success:
                 if len(args) == 2:
                     print("> Player has been removed: " + args[1])
@@ -139,7 +127,7 @@ def command_processor(args):
         else:
             help(None)
 
-    write_leaderboard()
+    write_leaderboard(leaderboard_controller.get_active_leaderboard())
 
 def sanitise_input(input_arr):
     san = []
@@ -147,24 +135,19 @@ def sanitise_input(input_arr):
         san.append(item.lower())
     return san
 
-def load_leaderboard():
-    leaderboard.set_players(read_leaderboard())
-
-def write_leaderboard():
-    with open("leaderboard.csv", "w") as f:
+def write_leaderboard(leaderboard):
+    with open("../leaderboards/" + leaderboard.name + ".sml", "w") as f:
         for player in leaderboard.get_players():
             f.write(str(player.name) + "\n")
 
-def read_leaderboard():
-    names = []
-    if os.path.isfile("leaderboard.csv"):
-        with open("leaderboard.csv") as f:
-            for line in f:
-                names.append(line.strip())
-    else:
-        file = open("leaderboard.csv", "w")      
-        file.close()
-    return names
+def load_leaderboards():
+    for filename in os.listdir("../leaderboards"):
+        players = []
+        if filename.endswith(".sml"):
+            with open("../leaderboards/"+ filename) as f:
+                for line in f:
+                    players.append(line.strip())
+            leaderboard_controller.initialise_leaderboard(players, filename[:-4])
 
 if __name__ == '__main__':
    main()
