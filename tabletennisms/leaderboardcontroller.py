@@ -127,13 +127,13 @@ class LeaderboardController:
     ## HTML TABLE CREATOR ##
     def create_html(self):
         leaderboard = self.get_active_leaderboard()
-        html = "<html><body><h3>" + leaderboard.name + "</h3>"
-        html += "<table border=1><tr><th>Rank</th><th>Name</th></tr>"
+        html = "<html><body><div align=\"center\" style=\"margin-top:4rem\"><h3>" + leaderboard.name + "</h3>"
+        html += "<table border=1><tr><th style=\"padding:0.5rem\">Rank</th><th style=\"padding:0.5rem\">Name</th></tr>"
 
         for index, player in enumerate(leaderboard.players):
-            html += "<tr><td>" + str(index+1) + "</td><td>" + player.name + "</td></tr>"
+            html += "<tr><td style=\"padding:0.5rem\">" + str(index+1) + "</td><td style=\"padding:0.5rem\">" + player.name + "</td></tr>"
 
-        html += "</table></body></html>"
+        html += "</table></div></body></html>"
 
         self.io_controller.write_html_file(html, leaderboard.name)
 
