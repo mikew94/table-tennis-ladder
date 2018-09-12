@@ -16,7 +16,7 @@ class Leaderboard:
             self.add_player(p)
 
     def insert_player_at_index(self, winner_player, loser_index):
-        self.players.insert(winner_player, loser_index)
+        self.players.insert(loser_index, winner_player)
 
     def add_player(self, player_name):
         self.players.append(Player(player_name))
