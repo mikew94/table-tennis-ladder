@@ -26,3 +26,15 @@ class IOController:
                         players.append(line.strip())
                 leaderboards.append(Leaderboard(filename[:-4], players))
         return leaderboards
+
+    def delete_file(self, filename):
+        try:
+            os.remove("../leaderboards/" + filename + ".sml")
+        except OSError:
+            pass
+
+    ### HTML TABLE CREATOR ###
+
+    def write_html_file(self, html, leaderboard_name):
+        with open(leaderboard_name + ".html", "w") as f:
+            f.write(html)

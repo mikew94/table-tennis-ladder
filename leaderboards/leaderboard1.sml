@@ -3,8 +3,8 @@ bob
 mike
 fred
 sandeep
-reggie
 dick
+reggie
 sandeeps
 reg
 geg

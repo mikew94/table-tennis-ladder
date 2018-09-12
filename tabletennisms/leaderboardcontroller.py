@@ -103,13 +103,39 @@ class LeaderboardController:
         else:
             success = False
         return success
+
+    ###
+    def delete_leaderboard(self, leaderboard_name):
+        success = True
+        leaderboard = self.get_leaderboard_by_name(leaderboard_name)
+        if leaderboard:
+            self.leaderboards.remove(leaderboard)
+            self.delete_leaderboard_file(leaderboard.name)
+            self.set_active_leaderboard(self.leaderboards[0].name)
+            self.io_controller.write_active_leaderboard(self.leaderboards[0].name)
+        else:
+            success = False
+        return success
         
     def get_leaderboard_by_name(self, leaderboard_name):
         for leaderboard in self.leaderboards:
-            print(leaderboard.name)
             if leaderboard_name == leaderboard.name:
                 return leaderboard
         return None
+
+
+    ## HTML TABLE CREATOR ##
+    def create_html(self):
+        leaderboard = self.get_active_leaderboard()
+        html = "<html><body><h3>" + leaderboard.name + "</h3>"
+        html += "<table border=1><tr><th>Rank</th><th>Name</th></tr>"
+
+        for index, player in enumerate(leaderboard.players):
+            html += "<tr><td>" + str(index+1) + "</td><td>" + player.name + "</td></tr>"
+
+        html += "</table></body></html>"
+
+        self.io_controller.write_html_file(html, leaderboard.name)
 
     ## IO ##
 
@@ -124,3 +150,6 @@ class LeaderboardController:
     ###
     def load_active_leaderboard(self):
         self.set_active_leaderboard(self.io_controller.read_active_leaderboard())
+
+    def delete_leaderboard_file(self, filename):
+        self.io_controller.delete_file(filename)

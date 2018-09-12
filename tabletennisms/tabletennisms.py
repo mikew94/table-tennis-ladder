@@ -47,6 +47,10 @@ def create_leaderboard(leaderboard_name):
 def change_leaderboard(leaderboard_name):
     return leaderboard_controller.change_active_leaderboard(leaderboard_name)
 
+def delete_leaderboard(leaderboard_name):
+    return leaderboard_controller.delete_leaderboard(leaderboard_name)
+
+## IO Commands
 def save_leaderboard():
     leaderboard_controller.save_leaderboard()
 
@@ -83,7 +87,7 @@ def help(command):
         print("usage: -help [command]")
 
 
-commands = ["-add", "-remove", "-clear", "-score", "-find", "-show", "-help", "-create", "-change", "-active"]
+commands = ["-add", "-remove", "-clear", "-score", "-find", "-show", "-help", "-create", "-change", "-active", "-delete"]
 
 ###############
 
@@ -99,6 +103,9 @@ def main():
     else:
         help(None)
         sys.exit(1)
+
+    leaderboard_controller.create_html()    
+
 
 def command_processor(args):
     if args[0] == "-add":
@@ -159,6 +166,15 @@ def command_processor(args):
                 print("> Active leaderboard changed to " + args[1])
             else:
                 print("! Could not change the active leaderboard to supplied name. Try entering a valid name")
+        else:
+            help(args[0])
+    elif args[0] == "-delete":
+        if len(args) == 2:
+            success = delete_leaderboard(args[1])
+            if success:
+                print("> Entered leaderboard has been deleted")
+            else:
+                print("! Could not find supplied leaderboard to delete")
         else:
             help(args[0])
     elif args[0] == "-show":
