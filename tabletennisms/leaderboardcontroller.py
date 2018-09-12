@@ -39,7 +39,7 @@ class LeaderboardController:
                 leaderboard.add_player(winner_name)
             if leaderboard.get_player_from_list(loser_name) is None:
                 leaderboard.add_player(loser_name)
-        leaderboar.update_player_position(winner_name, loser_name)
+        self.update_player_position(winner_name, loser_name)
 
     def update_player_position(self, winner_name, loser_name):
         loser_index = self.leaderboard.players.index(self.leaderboard.get_player_from_list(loser_name))
