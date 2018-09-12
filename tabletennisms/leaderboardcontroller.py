@@ -98,7 +98,7 @@ class LeaderboardController:
     ###
     def change_active_leaderboard(self, leaderboard_name):
         success = True
-        if not self.get_leaderboard_by_name(leaderboard_name):
+        if self.get_leaderboard_by_name(leaderboard_name):
             self.active_leaderboard_name = leaderboard_name
         else:
             success = False
@@ -106,6 +106,7 @@ class LeaderboardController:
         
     def get_leaderboard_by_name(self, leaderboard_name):
         for leaderboard in self.leaderboards:
+            print(leaderboard.name)
             if leaderboard_name == leaderboard.name:
                 return leaderboard
         return None
