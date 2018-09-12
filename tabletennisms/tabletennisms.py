@@ -2,10 +2,11 @@ from leaderboard import Leaderboard
 from player import Player
 from prettytable import PrettyTable
 from leaderboardcontroller import LeaderboardController
-import os
+from iocontroller import IOController
 import sys
 
 leaderboard_controller = LeaderboardController()
+io_controller = IOController()
 
 ### COMMANDS ###
 def add_players(players):
@@ -40,6 +41,27 @@ def get_leaderboard_players():
 def clear_table():
     leaderboard_controller.clear_table()
 
+def create_leaderboard(leaderboard_name):
+    return leaderboard_controller.create_leaderboard(leaderboard_name)
+
+def change_leaderboard(leaderboard_name):
+    return leaderboard_controller.change_active_leaderboard(leaderboard_name)
+
+def save_leaderboard():
+    leaderboard_controller.save_leaderboard()
+
+def load_leaderboards():
+    leaderboard_controller.load_leaderboards()
+
+def save_active_leaderboard_name(leaderboard_name):
+    io_controller.write_active_leaderboard(leaderboard_name)
+
+def load_active_leaderboard():
+    leaderboard_controller.load_active_leaderboard()
+
+def show_active():
+    print("> Active leaderboard is " + leaderboard_controller.get_active_leaderboard_name())
+
 def help(command):
     if command == "-score" or command == "score":
         print("usage: -score [winner name] [loser name]")
@@ -61,13 +83,14 @@ def help(command):
         print("usage: -help [command]")
 
 
-commands = ["-add", "-remove", "-clear", "-score", "-find", "-show", "-help"]
+commands = ["-add", "-remove", "-clear", "-score", "-find", "-show", "-help", "-create", "-change", "-active"]
 
 ###############
 
 def main():
 
     load_leaderboards()
+    load_active_leaderboard()
 
     args = sanitise_input(sys.argv[1:])
 
@@ -119,35 +142,42 @@ def command_processor(args):
                 print("! Player %s could not be found in the leaderboard" % (args[1]))
         else:
             help(args[0])
+    elif args[0] == "-create":
+        if len(args) == 2:
+            success = create_leaderboard(args[1])
+            if success:
+                save_active_leaderboard_name(args[1])
+                print("Table added")
+            else:
+                print("Table already exists, please choose different name")
+        else:
+            help(args[0])
+    elif args[0] == "-change":
+        if len(args) == 2:
+            success = change_leaderboard(args[1])
+            if success:
+                print("> Active leaderboard changed to " + args[1])
+            else:
+                print("! Could not change the active leaderboard to supplied name. Try entering a valid name")
+        else:
+            help(args[0])
     elif args[0] == "-show":
         show_leaderboard()
+    elif args[0] == "-active":
+        show_active()
     elif args[0] == "-help":
         if len(args) == 2:
             help(args[1])
         else:
             help(None)
 
-    write_leaderboard(leaderboard_controller.get_active_leaderboard())
+    save_leaderboard()
 
 def sanitise_input(input_arr):
     san = []
     for item in input_arr:
         san.append(item.lower())
     return san
-
-def write_leaderboard(leaderboard):
-    with open("../leaderboards/" + leaderboard.name + ".sml", "w") as f:
-        for player in leaderboard.get_players():
-            f.write(str(player.name) + "\n")
-
-def load_leaderboards():
-    for filename in os.listdir("../leaderboards"):
-        players = []
-        if filename.endswith(".sml"):
-            with open("../leaderboards/"+ filename) as f:
-                for line in f:
-                    players.append(line.strip())
-            leaderboard_controller.initialise_leaderboard(players, filename[:-4])
 
 if __name__ == '__main__':
    main()
