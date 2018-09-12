@@ -45,13 +45,8 @@ class LeaderboardController:
         self.update_player_position(leaderboard, winner_name, loser_name)
 
     def update_player_position(self, leaderboard, winner_name, loser_name):
-<<<<<<< HEAD
-        loser_index = self.leaderboard.players.index(self.leaderboard.get_player_from_list(loser_name))
-        winner_index = self.leaderboard.players.index(self.leaderboard.get_player_from_list(winner_name))
-=======
         loser_index = leaderboard.players.index(leaderboard.get_player_from_list(loser_name))
         winner_index = leaderboard.players.index(leaderboard.get_player_from_list(winner_name))
->>>>>>> f0dbb854eb819c2d2cf4ae6f705e2b8dc4351ee0
 
         if (winner_index < loser_index):
             return
