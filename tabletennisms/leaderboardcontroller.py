@@ -10,38 +10,37 @@ class LeaderboardController:
 
     ###
     def add_players(self, players):
-        success = True
+        players_not_added = []
         leaderboard = self.get_active_leaderboard()
+		print(leaderboard)
         for player_name in players:
             if not leaderboard.get_player_from_list(player_name):
                 leaderboard.add_player(player_name)
             else:
-                success = False
-        return success
+                players_not_added.append(player_name)
+        return players_not_added
 
     ###
     def remove_players(self, players):
-        success = True
+        players_not_removed = []
         leaderboard = self.get_active_leaderboard()
         for player_name in players:
             player = leaderboard.get_player_from_list(player_name)
             if player:
                 leaderboard.remove_player(player)
             else:
-                success = False
-        return success
+                players_not_removed.append(player_name)
+        return players_not_removed
 
     ###
     def submit_score(self, winner_name, loser_name):
         leaderboard = self.get_active_leaderboard()
-        if leaderboard.get_player_from_list(winner_name) is None and leaderboard.get_player_from_list(loser_name) is None:
+        winner_player = leaderboard.get_player_from_list(winner_name)
+        loser_player = leaderboard.get_player_from_list(loser_name)
+        if winner_player is None:
             leaderboard.add_player(winner_name)
+        if loser_player is None:
             leaderboard.add_player(loser_name)
-        else:
-            if leaderboard.get_player_from_list(winner_name) is None:
-                leaderboard.add_player(winner_name)
-            if leaderboard.get_player_from_list(loser_name) is None:
-                leaderboard.add_player(loser_name)
         self.update_player_position(leaderboard, winner_name, loser_name)
 
     def update_player_position(self, leaderboard, winner_name, loser_name):
@@ -66,7 +65,7 @@ class LeaderboardController:
 
     ###
     def initialise_leaderboards(self, leaderboards):
-        self.active_leaderboard_name = leaderboards[len(leaderboards)-1].name
+        self.set_active_leaderboard(leaderboards[len(leaderboards)-1].name)
         self.leaderboards = leaderboards
 
     ###
@@ -87,35 +86,29 @@ class LeaderboardController:
 
     ###
     def create_leaderboard(self, leaderboard_name):
-        success = True
         if not self.get_leaderboard_by_name(leaderboard_name):
             self.leaderboards.append(Leaderboard(leaderboard_name, []))
             self.active_leaderboard_name = leaderboard_name
-        else:
-            success = False
-        return success
+            return True
+        return False
 
     ###
     def change_active_leaderboard(self, leaderboard_name):
-        success = True
         if self.get_leaderboard_by_name(leaderboard_name):
             self.active_leaderboard_name = leaderboard_name
-        else:
-            success = False
-        return success
+            return True
+        return False
 
     ###
     def delete_leaderboard(self, leaderboard_name):
-        success = True
         leaderboard = self.get_leaderboard_by_name(leaderboard_name)
         if leaderboard:
             self.leaderboards.remove(leaderboard)
             self.delete_leaderboard_file(leaderboard.name)
             self.set_active_leaderboard(self.leaderboards[0].name)
             self.io_controller.write_active_leaderboard(self.leaderboards[0].name)
-        else:
-            success = False
-        return success
+            return True
+        return False
         
     def get_leaderboard_by_name(self, leaderboard_name):
         for leaderboard in self.leaderboards:
