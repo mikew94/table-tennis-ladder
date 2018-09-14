@@ -2,12 +2,12 @@ from leaderboardcontroller import LeaderboardController
 
 class InputRouter():
 
-    leaderboard_controller = LeaderboardController()
+    def __init__(self, leaderboard_controller):
+        self.leaderboard_controller = leaderboard_controller
 
     def add_players(self, args):
         if len(args) >= 1 and len(args) < 6:
             players_not_added = self.leaderboard_controller.add_players(args)
-            print(args)
             if len(players_not_added) == 0:
                 if len(args) == 2:
                     return "> Player has been added: " + args[1]
@@ -83,5 +83,5 @@ class InputRouter():
         else:
             return None
 
-    def show_active_leaderboard_name(self):
+    def show_active_leaderboard(self):
         return self.leaderboard_controller.get_active_leaderboard_name()

@@ -9,7 +9,7 @@ import click
 
 leaderboard_controller = LeaderboardController()
 io_controller = IOController()
-router = InputRouter()
+router = InputRouter(leaderboard_controller)
 
 def show_leaderboard():
     leader_table = PrettyTable()

@@ -12,7 +12,6 @@ class LeaderboardController:
     def add_players(self, players):
         players_not_added = []
         leaderboard = self.get_active_leaderboard()
-		print(leaderboard)
         for player_name in players:
             if not leaderboard.get_player_from_list(player_name):
                 leaderboard.add_player(player_name)
