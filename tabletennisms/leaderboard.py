@@ -1,6 +1,6 @@
 from player import Player
 
-class Leaderboard:
+class Leaderboard(object):
 
     def __init__(self, name, players):
         self.name = name
