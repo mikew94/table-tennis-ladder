@@ -5,8 +5,10 @@ from controllers.iocontroller import IOController
 class LeaderboardController:
 
     io_controller = IOController()
-    leaderboards = []
-    active_leaderboard_name = ""
+
+    def __init__(self, leaderboards, active_leaderboard_name):
+        self.leaderboards = leaderboards
+        self.active_leaderboard_name = active_leaderboard_name
 
     ###
     def add_players(self, players):
@@ -14,6 +16,7 @@ class LeaderboardController:
         leaderboard = self.get_active_leaderboard()
         for player_name in players:
             if not leaderboard.get_player_from_list(player_name):
+                print "1: " + player_name
                 leaderboard.add_player(player_name)
             else:
                 players_not_added.append(player_name)
@@ -134,14 +137,6 @@ class LeaderboardController:
     ###
     def save_leaderboard(self):
         self.io_controller.write_leaderboard(self.get_active_leaderboard())
-
-    ###
-    def load_leaderboards(self):
-        self.initialise_leaderboards(self.io_controller.load_leaderboards())
-
-    ###
-    def load_active_leaderboard(self):
-        self.set_active_leaderboard(self.io_controller.read_active_leaderboard())
 
     def delete_leaderboard_file(self, filename):
         self.io_controller.delete_file(filename)

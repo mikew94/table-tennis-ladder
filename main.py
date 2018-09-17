@@ -6,8 +6,10 @@ from controllers.iocontroller import IOController
 from routers.inputrouter import InputRouter
 import sys
 
-leaderboard_controller = LeaderboardController()
 io_controller = IOController()
+leaderboards = io_controller.load_leaderboards()
+active_leaderboard_name = io_controller.read_active_leaderboard()
+leaderboard_controller = LeaderboardController(leaderboards, active_leaderboard_name)
 router = InputRouter(leaderboard_controller)
 
 def show_leaderboard():
@@ -28,14 +30,8 @@ def show_leaderboard():
 def save_leaderboard():
     leaderboard_controller.save_leaderboard()
 
-def load_leaderboards():
-    leaderboard_controller.load_leaderboards()
-
 def save_active_leaderboard_name(leaderboard_name):
     io_controller.write_active_leaderboard(leaderboard_name)
-
-def load_active_leaderboard():
-    leaderboard_controller.load_active_leaderboard()
 
 def help(command):
     if command == "-score" or command == "score":
@@ -60,9 +56,6 @@ def help(command):
 commands = ["-add", "-remove", "-clear", "-score", "-find", "-show", "-help", "-create", "-change", "-active", "-delete"]
 
 def main():
-
-    load_leaderboards()
-    load_active_leaderboard()
 
     args = sanitise_input(sys.argv[1:])
 
