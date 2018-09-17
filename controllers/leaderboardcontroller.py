@@ -1,6 +1,6 @@
-from leaderboard import Leaderboard
-from player import Player
-from iocontroller import IOController
+from models.leaderboard import Leaderboard
+from models.player import Player
+from controllers.iocontroller import IOController
 
 class LeaderboardController:
 

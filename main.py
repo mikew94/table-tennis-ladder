@@ -1,11 +1,10 @@
-from leaderboard import Leaderboard
-from player import Player
+from models.leaderboard import Leaderboard
+from models.player import Player
 from prettytable import PrettyTable
-from leaderboardcontroller import LeaderboardController
-from iocontroller import IOController
-from inputrouter import InputRouter
+from controllers.leaderboardcontroller import LeaderboardController
+from controllers.iocontroller import IOController
+from routers.inputrouter import InputRouter
 import sys
-import click
 
 leaderboard_controller = LeaderboardController()
 io_controller = IOController()

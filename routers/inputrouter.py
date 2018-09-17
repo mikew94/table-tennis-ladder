@@ -1,4 +1,4 @@
-from leaderboardcontroller import LeaderboardController
+from controllers.leaderboardcontroller import LeaderboardController
 
 class InputRouter():
 
